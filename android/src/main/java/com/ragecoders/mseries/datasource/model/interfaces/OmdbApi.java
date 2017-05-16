@@ -1,7 +1,6 @@
 package com.ragecoders.mseries.datasource.model.interfaces;
 
 import com.ragecoders.mseries.datasource.model.domain.Series;
-
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -11,6 +10,5 @@ import rx.Observable;
  */
 
 public interface OmdbApi {
-    @GET("?")
-    Observable<Series> getSeries(@Query("t") String title);
+  @GET("?") Observable<Series> getSeries(@Query("t") String title, @Query("plot") String plot);
 }
