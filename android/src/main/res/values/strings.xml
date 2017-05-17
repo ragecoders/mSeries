@@ -5,4 +5,11 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    //Menu items
+    <string name="menu_action_home">Home</string>
+    <string name="menu_action_following">Following</string>
+    <string name="menu_action_favorites">Favorites</string>
+    <string name="menu_action_explore">Explore</string>
+    <string name="menu_action_configuration">Configuration</string>
+    <string name="menu_action_about">About us</string>
 </resources>
