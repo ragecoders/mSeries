@@ -3,14 +3,19 @@ package com.ragecoders.mseries.view;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
@@ -43,7 +48,30 @@ public class HomeActivity extends AppCompatActivity
     ButterKnife.bind(this);
     injectDependencies();
     initializeView();
-    useApi();
+  }
+
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.menu_search_view, menu);
+
+    final MenuItem searchItem = menu.findItem(R.id.action_search);
+    final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+    searchView.setQueryHint(getText(R.string.action_search));
+    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override public boolean onQueryTextSubmit(String query) {
+        useApi(query);
+        searchView.setQuery("", false);
+        searchView.setIconified(true);
+        return true;
+      }
+
+      @Override public boolean onQueryTextChange(String newText) {
+        //textView.setText(newText);
+        return true;
+      }
+    });
+
+    return super.onCreateOptionsMenu(menu);
   }
 
   private void initializeView() {
@@ -64,14 +92,16 @@ public class HomeActivity extends AppCompatActivity
     omdbApiComponent.inject(this);
   }
 
-  private void useApi() {
-    Observable<Series> series = omdbApi.getSeries("Doctor Who", "full");
+  private void useApi(String text) {
+    Observable<Series> series = omdbApi.getSeries(text, "full");
     series.subscribeOn(Schedulers.newThread())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(serie -> {
-          Log.e("Doctor Who", serie.getPlot());
           tvDescription.setText(serie.getPlot());
           Glide.with(this).load(serie.getPoster()).into(image);
+        }, error -> {
+          Toast.makeText(HomeActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT)
+              .show();
         });
   }
 
