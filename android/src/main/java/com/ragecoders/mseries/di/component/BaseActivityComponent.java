@@ -1,6 +1,6 @@
 package com.ragecoders.mseries.di.component;
 
-import com.ragecoders.mseries.BaseActivity;
+import com.ragecoders.mseries.ui.activities.BaseActivity;
 import com.ragecoders.mseries.di.module.BaseActivityModule;
 import com.ragecoders.mseries.di.scope.ActivityScope;
 import dagger.Component;

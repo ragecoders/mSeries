@@ -1,36 +1,31 @@
-package com.ragecoders.mseries.ui.activities;
+package com.ragecoders.mseries.ui.activities.HomeActivity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.ragecoders.datasource.api.OmdbApiService;
 import com.ragecoders.datasource.api.model.Series;
-import com.ragecoders.mseries.BaseActivity;
 import com.ragecoders.mseries.R;
 import com.ragecoders.mseries.di.component.DaggerHomeActivityComponent;
 import com.ragecoders.mseries.di.component.HomeActivityComponent;
 import com.ragecoders.mseries.di.module.HomeActivityModule;
 import com.ragecoders.mseries.homeactivity.HomeActivityPresenter;
 import com.ragecoders.mseries.homeactivity.HomeActivityView;
+import com.ragecoders.mseries.ui.activities.BaseActivity;
 import javax.inject.Inject;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
 
 /**
  * Created by Fernando Q. Esquitino
@@ -41,13 +36,9 @@ import rx.schedulers.Schedulers;
 public class HomeActivity extends BaseActivity
     implements HomeActivityView, NavigationView.OnNavigationItemSelectedListener {
 
-  @BindView(R.id.drawer_layout) DrawerLayout drawer;
-  @BindView(R.id.nav_view) NavigationView navigationView;
-  @BindView(R.id.home_activity_tv_description) TextView tvDescription;
-  @BindView(R.id.home_activity_image) ImageView image;
-
   @Inject OmdbApiService omdbApiService;
   @Inject HomeActivityPresenter presenter;
+  @Inject HomeActivityViewHolder viewHolder;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -86,12 +77,12 @@ public class HomeActivity extends BaseActivity
     setSupportActionBar(toolbar);
 
     ActionBarDrawerToggle toggle =
-        new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
+        new ActionBarDrawerToggle(this, viewHolder.drawer, toolbar, R.string.navigation_drawer_open,
             R.string.navigation_drawer_close);
-    drawer.setDrawerListener(toggle);
+    viewHolder.drawer.setDrawerListener(toggle);
     toggle.syncState();
 
-    navigationView.setNavigationItemSelectedListener(this);
+    viewHolder.navigationView.setNavigationItemSelectedListener(this);
   }
 
   private void injectDependencies() {
@@ -101,13 +92,18 @@ public class HomeActivity extends BaseActivity
     homeActivityComponent.inject(this);
   }
 
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    viewHolder.unbind();
+  }
+
   @Override public void search(String text) {
     Observable<Series> series = omdbApiService.getSeries(text, "full");
     series.subscribeOn(Schedulers.newThread())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(seriesResult -> {
-          tvDescription.setText(seriesResult.getPlot());
-          Glide.with(this).load(seriesResult.getPoster()).into(image);
+          viewHolder.tvDescription.setText(seriesResult.getPlot());
+          Glide.with(this).load(seriesResult.getPoster()).into(viewHolder.image);
         }, error -> {
           Toast.makeText(HomeActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT)
               .show();
@@ -115,8 +111,8 @@ public class HomeActivity extends BaseActivity
   }
 
   @Override public void onBackPressed() {
-    if (drawer.isDrawerOpen(GravityCompat.START)) {
-      drawer.closeDrawer(GravityCompat.START);
+    if (viewHolder.drawer.isDrawerOpen(GravityCompat.START)) {
+      viewHolder.drawer.closeDrawer(GravityCompat.START);
     } else {
       super.onBackPressed();
     }
@@ -141,7 +137,7 @@ public class HomeActivity extends BaseActivity
 
     }
 
-    drawer.closeDrawer(GravityCompat.START);
+    viewHolder.drawer.closeDrawer(GravityCompat.START);
 
     return true;
   }

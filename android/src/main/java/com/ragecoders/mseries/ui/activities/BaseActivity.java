@@ -1,8 +1,10 @@
-package com.ragecoders.mseries;
+package com.ragecoders.mseries.ui.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.ViewGroup;
 import com.ragecoders.mseries.di.component.BaseActivityComponent;
 import com.ragecoders.mseries.di.component.DaggerBaseActivityComponent;
 
@@ -21,5 +23,9 @@ public abstract class BaseActivity extends AppCompatActivity {
   private void injectDependencies() {
     BaseActivityComponent baseActivityComponent = DaggerBaseActivityComponent.builder().build();
     baseActivityComponent.inject(this);
+  }
+
+  public View getRootView() {
+    return ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
   }
 }

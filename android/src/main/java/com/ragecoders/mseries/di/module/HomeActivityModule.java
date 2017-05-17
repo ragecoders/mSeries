@@ -5,7 +5,8 @@ import com.ragecoders.mseries.di.scope.ActivityScope;
 import com.ragecoders.mseries.homeactivity.HomeActivityPresenter;
 import com.ragecoders.mseries.homeactivity.HomeActivityPresenterImpl;
 import com.ragecoders.mseries.homeactivity.HomeActivityView;
-import com.ragecoders.mseries.ui.activities.HomeActivity;
+import com.ragecoders.mseries.ui.activities.HomeActivity.HomeActivity;
+import com.ragecoders.mseries.ui.activities.HomeActivity.HomeActivityViewHolder;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
@@ -44,5 +45,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
   @Provides @ActivityScope OmdbApiService provideOmdbApi(Retrofit retrofit) {
     return retrofit.create(OmdbApiService.class);
+  }
+
+  @Provides @ActivityScope HomeActivityViewHolder provideHomeActivityViewHolder() {
+    return new HomeActivityViewHolder(homeActivity.getRootView());
   }
 }
