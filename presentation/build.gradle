@@ -1,0 +1,25 @@
+apply plugin: 'java'
+apply plugin: 'checkstyle'
+apply plugin: 'war'
+apply plugin: 'me.tatarka.retrolambda'
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath parent.ext.libRetroLambda
+  }
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  providedCompile parent.ext.libDaggerCompiler
+  compile parent.ext.libDagger
+
+  compile project(':domain')
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"

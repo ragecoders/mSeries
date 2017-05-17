@@ -1,6 +1,6 @@
 package com.ragecoders.mseries.di.module;
 
-import com.ragecoders.mseries.datasource.model.interfaces.OmdbApi;
+import com.ragecoders.datasource.api.OmdbApiService;
 import com.ragecoders.mseries.di.scope.ActivityScope;
 import dagger.Module;
 import dagger.Provides;
@@ -9,12 +9,15 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by ferquies on 14/05/17.
+ * Created by Fernando Q. Esquitino
+ * Mail: fernando@ragecoders.com
+ * Web: ragecoders.com
+ * 14/05/17
  */
-@Module public class OmdbApiModule {
+@Module public class BaseActivityModule {
   private static final String URL_BASE = "http://www.omdbapi.com/";
 
-  public OmdbApiModule() {
+  public BaseActivityModule() {
   }
 
   @Provides @ActivityScope Retrofit provideRetrofit() {
@@ -24,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
         .build();
   }
 
-  @Provides @ActivityScope OmdbApi provideOmdbApi(Retrofit retrofit) {
-    return retrofit.create(OmdbApi.class);
+  @Provides @ActivityScope OmdbApiService provideOmdbApi(Retrofit retrofit) {
+    return retrofit.create(OmdbApiService.class);
   }
 }

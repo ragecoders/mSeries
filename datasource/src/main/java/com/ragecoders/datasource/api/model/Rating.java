@@ -1,20 +1,12 @@
-package com.ragecoders.model;
+package com.ragecoders.datasource.api.model;
 
-/**
- * Created by ferquies on 14/05/17.
- */
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Rating {
-  private String source;
-  private String value;
 
-  public Rating() {
-  }
-
-  public Rating(String source, String value) {
-    this.source = source;
-    this.value = value;
-  }
+  @SerializedName("Source") @Expose private String source;
+  @SerializedName("Value") @Expose private String value;
 
   public String getSource() {
     return source;

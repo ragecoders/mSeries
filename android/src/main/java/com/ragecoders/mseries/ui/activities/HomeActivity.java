@@ -1,4 +1,4 @@
-package com.ragecoders.mseries.view;
+package com.ragecoders.mseries.ui.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -6,10 +6,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,28 +17,37 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
+import com.ragecoders.datasource.api.OmdbApiService;
+import com.ragecoders.datasource.api.model.Series;
+import com.ragecoders.mseries.BaseActivity;
 import com.ragecoders.mseries.R;
-import com.ragecoders.mseries.datasource.model.domain.Series;
-import com.ragecoders.mseries.datasource.model.interfaces.OmdbApi;
-import com.ragecoders.mseries.di.component.DaggerOmdbApiComponent;
-import com.ragecoders.mseries.di.component.OmdbApiComponent;
+import com.ragecoders.mseries.di.component.DaggerHomeActivityComponent;
+import com.ragecoders.mseries.di.component.HomeActivityComponent;
+import com.ragecoders.mseries.di.module.HomeActivityModule;
+import com.ragecoders.mseries.homeactivity.HomeActivityPresenter;
+import com.ragecoders.mseries.homeactivity.HomeActivityView;
 import javax.inject.Inject;
-import retrofit2.Retrofit;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HomeActivity extends AppCompatActivity
-    implements NavigationView.OnNavigationItemSelectedListener {
+
+/**
+ * Created by Fernando Q. Esquitino
+ * Mail: fernando@ragecoders.com
+ * Web: ragecoders.com
+ * 14/05/17
+ */
+public class HomeActivity extends BaseActivity
+    implements HomeActivityView, NavigationView.OnNavigationItemSelectedListener {
 
   @BindView(R.id.drawer_layout) DrawerLayout drawer;
   @BindView(R.id.nav_view) NavigationView navigationView;
   @BindView(R.id.home_activity_tv_description) TextView tvDescription;
   @BindView(R.id.home_activity_image) ImageView image;
 
-  @Inject Retrofit retrofit;
-
-  @Inject OmdbApi omdbApi;
+  @Inject OmdbApiService omdbApiService;
+  @Inject HomeActivityPresenter presenter;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -59,7 +66,7 @@ public class HomeActivity extends AppCompatActivity
     searchView.setQueryHint(getText(R.string.action_search));
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override public boolean onQueryTextSubmit(String query) {
-        useApi(query);
+        presenter.search(query);
         searchView.setQuery("", false);
         searchView.setIconified(true);
         return true;
@@ -88,17 +95,19 @@ public class HomeActivity extends AppCompatActivity
   }
 
   private void injectDependencies() {
-    OmdbApiComponent omdbApiComponent = DaggerOmdbApiComponent.builder().build();
-    omdbApiComponent.inject(this);
+    HomeActivityComponent homeActivityComponent = DaggerHomeActivityComponent.builder()
+        .homeActivityModule(new HomeActivityModule(this))
+        .build();
+    homeActivityComponent.inject(this);
   }
 
-  private void useApi(String text) {
-    Observable<Series> series = omdbApi.getSeries(text, "full");
+  @Override public void search(String text) {
+    Observable<Series> series = omdbApiService.getSeries(text, "full");
     series.subscribeOn(Schedulers.newThread())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(serie -> {
-          tvDescription.setText(serie.getPlot());
-          Glide.with(this).load(serie.getPoster()).into(image);
+        .subscribe(seriesResult -> {
+          tvDescription.setText(seriesResult.getPlot());
+          Glide.with(this).load(seriesResult.getPoster()).into(image);
         }, error -> {
           Toast.makeText(HomeActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT)
               .show();

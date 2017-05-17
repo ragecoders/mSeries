@@ -1,61 +1,36 @@
-package com.ragecoders.model;
+package com.ragecoders.datasource.api.model;
 
-import java.util.Date;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
+/**
+ * Created by ferquies on 14/05/17.
+ */
+
 public class Series {
-  private String title;
-  private String year;
-  private String rated;
-  private Date released;
-  private String runtime;
-  private String genre;
-  private String director;
-  private String writer;
-  private List<String> actors;
-  private String plot;
-  private String country;
-  private String awards;
-  private String poster;
-  private List<Rating> ratings;
-  private String metascore;
-  private String imdbRating;
-  private String imdbVotes;
-  private String imdbId;
-  private String type;
-  private String totalSeasons;
-  private String response;
-
-  public Series() {
-  }
-
-  public Series(String title, String year, String rated, Date released, String runtime,
-      String genre, String director, String writer, List<String> actors, String plot,
-      String country, String awards, String poster, List<Rating> ratings, String metascore,
-      String imdbRating, String imdbVotes, String imdbId, String type, String totalSeasons,
-      String response) {
-    this.title = title;
-    this.year = year;
-    this.rated = rated;
-    this.released = released;
-    this.runtime = runtime;
-    this.genre = genre;
-    this.director = director;
-    this.writer = writer;
-    this.actors = actors;
-    this.plot = plot;
-    this.country = country;
-    this.awards = awards;
-    this.poster = poster;
-    this.ratings = ratings;
-    this.metascore = metascore;
-    this.imdbRating = imdbRating;
-    this.imdbVotes = imdbVotes;
-    this.imdbId = imdbId;
-    this.type = type;
-    this.totalSeasons = totalSeasons;
-    this.response = response;
-  }
+  @SerializedName("Title") @Expose private String title;
+  @SerializedName("Year") @Expose private String year;
+  @SerializedName("Rated") @Expose private String rated;
+  @SerializedName("Released") @Expose private String released;
+  @SerializedName("Runtime") @Expose private String runtime;
+  @SerializedName("Genre") @Expose private String genre;
+  @SerializedName("Director") @Expose private String director;
+  @SerializedName("Writer") @Expose private String writer;
+  @SerializedName("Actors") @Expose private String actors;
+  @SerializedName("Plot") @Expose private String plot;
+  @SerializedName("Language") @Expose private String language;
+  @SerializedName("Country") @Expose private String country;
+  @SerializedName("Awards") @Expose private String awards;
+  @SerializedName("Poster") @Expose private String poster;
+  @SerializedName("Ratings") @Expose private List<Rating> ratings = null;
+  @SerializedName("Metascore") @Expose private String metascore;
+  @SerializedName("imdbRating") @Expose private String imdbRating;
+  @SerializedName("imdbVotes") @Expose private String imdbVotes;
+  @SerializedName("imdbID") @Expose private String imdbID;
+  @SerializedName("Type") @Expose private String type;
+  @SerializedName("totalSeasons") @Expose private String totalSeasons;
+  @SerializedName("Response") @Expose private String response;
 
   public String getTitle() {
     return title;
@@ -81,11 +56,11 @@ public class Series {
     this.rated = rated;
   }
 
-  public Date getReleased() {
+  public String getReleased() {
     return released;
   }
 
-  public void setReleased(Date released) {
+  public void setReleased(String released) {
     this.released = released;
   }
 
@@ -121,11 +96,11 @@ public class Series {
     this.writer = writer;
   }
 
-  public List<String> getActors() {
+  public String getActors() {
     return actors;
   }
 
-  public void setActors(List<String> actors) {
+  public void setActors(String actors) {
     this.actors = actors;
   }
 
@@ -135,6 +110,14 @@ public class Series {
 
   public void setPlot(String plot) {
     this.plot = plot;
+  }
+
+  public String getLanguage() {
+    return language;
+  }
+
+  public void setLanguage(String language) {
+    this.language = language;
   }
 
   public String getCountry() {
@@ -193,12 +176,12 @@ public class Series {
     this.imdbVotes = imdbVotes;
   }
 
-  public String getImdbId() {
-    return imdbId;
+  public String getImdbID() {
+    return imdbID;
   }
 
-  public void setImdbId(String imdbId) {
-    this.imdbId = imdbId;
+  public void setImdbID(String imdbID) {
+    this.imdbID = imdbID;
   }
 
   public String getType() {

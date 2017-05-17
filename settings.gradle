@@ -1,2 +1,2 @@
-include ':domain'
+include ':domain', ':datasource', ':presentation'
 include 'android'
