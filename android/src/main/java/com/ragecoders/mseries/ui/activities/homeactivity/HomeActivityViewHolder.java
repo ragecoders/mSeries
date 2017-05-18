@@ -1,4 +1,4 @@
-package com.ragecoders.mseries.ui.activities.HomeActivity;
+package com.ragecoders.mseries.ui.activities.homeactivity;
 
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;

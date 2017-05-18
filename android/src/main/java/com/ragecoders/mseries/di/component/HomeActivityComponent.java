@@ -2,7 +2,7 @@ package com.ragecoders.mseries.di.component;
 
 import com.ragecoders.mseries.di.module.HomeActivityModule;
 import com.ragecoders.mseries.di.scope.ActivityScope;
-import com.ragecoders.mseries.ui.activities.HomeActivity.HomeActivity;
+import com.ragecoders.mseries.ui.activities.homeactivity.HomeActivity;
 import dagger.Component;
 
 /**

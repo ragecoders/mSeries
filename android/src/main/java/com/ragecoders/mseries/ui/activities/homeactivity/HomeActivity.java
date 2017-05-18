@@ -1,4 +1,4 @@
-package com.ragecoders.mseries.ui.activities.HomeActivity;
+package com.ragecoders.mseries.ui.activities.homeactivity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.ragecoders.datasource.api.OmdbApiService;
 import com.ragecoders.datasource.api.model.Series;
@@ -40,10 +39,13 @@ public class HomeActivity extends BaseActivity
   @Inject HomeActivityPresenter presenter;
   @Inject HomeActivityViewHolder viewHolder;
 
+  @Inject public HomeActivity newInstance() {
+    return new HomeActivity();
+  }
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_home);
-    ButterKnife.bind(this);
     injectDependencies();
     initializeView();
   }
